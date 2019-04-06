@@ -14,17 +14,17 @@ func checkEquation(_ userInput: [String]) {
     //Will check if the input can be calculated
     if userInput.count <= 0 {
         //print("There are no values in your input")
-        exit(0)
+        exit(1)
     }
     
     //Begins or ends with an integer
     if userInput[0] == "/" || userInput[0] == "x" || userInput[0] == "%" || userInput[0] == "+" || userInput[0] == "-" {
         //print("You must begin the equation with an integer")
-        exit(0)
+        exit(1)
     }
     if userInput[userInput.count - 1] == "/" || userInput[userInput.count - 1] == "x" || userInput[userInput.count - 1] == "%" || userInput[userInput.count - 1] == "+" || userInput[userInput.count - 1] == "-" {
         //print("You must end the equation with an integer")
-        exit(0)
+        exit(1)
     }
     
     //Check the Integers entered are legit
@@ -34,7 +34,7 @@ func checkEquation(_ userInput: [String]) {
                 position += 1
             } else {
                 //print("You must enter an integer")
-                exit(0)
+                exit(1)
             }
         }
     }
@@ -45,7 +45,7 @@ func checkEquation(_ userInput: [String]) {
         if value == "/" || value == "x" || value == "%" || value == "+" || value == "-" {
             if userInput[position + 1] == "/" || userInput[position + 1] == "x" || userInput[position + 1] == "%" || userInput[position + 1] == "+" || userInput[position + 1] == "-"{
                 //print("You cannot have two equations running consectutive to each other")
-                exit(0)
+                exit(1)
             }
             position += 1
         } else {
@@ -66,7 +66,7 @@ func solve(_ equation: [String]) -> Int {
 
             //Will check if being devided by zero
             if equationCopy[position + 1] == "0" {
-                exit(0)
+                exit(1)
             } else if equationCopy[position - 1] == "0" {
                 equationCopy[position + 1] = "0"
                 
@@ -96,7 +96,7 @@ func solve(_ equation: [String]) -> Int {
             equationCopy.remove(at: position)
             equationCopy.remove(at: position - 1)
             position -= 1
-            //dump(equationCopy)
+            
         } else {
             position += 1
         }
@@ -109,7 +109,7 @@ func solve(_ equation: [String]) -> Int {
 
             //Will check if being mod by zero
             if equationCopy[position + 1] == "0" {
-                exit(0)
+                exit(1)
             } else if equationCopy[position - 1] == "0" {
                 equationCopy[position + 1] = "0"
                 
@@ -132,9 +132,9 @@ func solve(_ equation: [String]) -> Int {
     // Check for '+' & '-' operands
     for value in equationCopy {
         if value == "+" {
-
-            equationCopy[position + 1] = String(Int(equationCopy[position - 1])! + Int(equationCopy[position + 1])!)
             
+            equationCopy[position + 1] = String(Int(equationCopy[position - 1])! + Int(equationCopy[position + 1])!)
+
             // Remove values from string
             equationCopy.remove(at: position)
             equationCopy.remove(at: position - 1)
@@ -151,6 +151,11 @@ func solve(_ equation: [String]) -> Int {
         } else {
             position += 1
         }
+    }
+    
+    //Will check if there are more than one integer remaining
+    if equationCopy.count > 1 {
+        exit(1)
     }
     
     let finalValue = Int(equationCopy[0])!
