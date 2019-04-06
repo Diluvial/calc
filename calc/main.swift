@@ -15,6 +15,7 @@ class mathEquation {
         self.equation = equation
     }
     
+    //Check the users input for errors before calculated
     func checkEquation() {
         var position: Int = 0
         
@@ -34,7 +35,7 @@ class mathEquation {
             exit(1)
         }
         
-        //Check the Integers entered are legit
+        //Check the Integers entered are legitimate
         for value in equation {
             if value != "/" && value != "x" && value != "%" && value != "+" && value != "-" {
                 if let _ = Int(value) {
@@ -61,95 +62,81 @@ class mathEquation {
         }
     }
     
+    //Performs the calculation
     func calculate() {
         var position: Int = 0
         
+        //Function to remove values from string
         func removePositions() {
             equation.remove(at: position)
             equation.remove(at: position - 1)
             position -= 1
         }
         
-        // Check for '/' operands
+        //Check for '/' operands
         for value in equation {
             if value == "/" {
-                
                 //Will check if being devided by zero
                 if equation[position + 1] == "0" {
                     print("You cannot devide by zero")
                     exit(1)
                 } else if equation[position - 1] == "0" {
                     equation[position + 1] = "0"
-                    
-                    //Will run the normal operation
+                //Will run the normal operation
                 } else {
                     equation[position + 1] = String(Int(equation[position - 1])! / Int(equation[position + 1])!)
                 }
-                
                 //Remove values from string
                 removePositions()
-                
             } else {
                 position += 1
             }
         }
         
         position = 0
-        // Check for 'x' operands
+        //Check for 'x' operands
         for value in equation {
             if value == "x" {
-                
                 equation[position + 1] = String(Int(equation[position - 1])! * Int(equation[position + 1])!)
-                
-                // Remove values from string
+                //Remove values from string
                 removePositions()
-                
             } else {
                 position += 1
             }
         }
         
         position = 0
-        // Check for '%' operands
+        //Check for '%' operands
         for value in equation {
             if value == "%" {
-                
                 //Will check if being mod by zero
                 if equation[position + 1] == "0" {
                     print("You cannot mod by zero")
                     exit(1)
                 } else if equation[position - 1] == "0" {
                     equation[position + 1] = "0"
-                    
-                    //Will run the normal operation
+                //Will run the normal operation
                 } else {
                     equation[position + 1] = String(Int(equation[position - 1])! % Int(equation[position + 1])!)
                 }
-                
-                // Remove values from string
+                //Remove values from string
                 removePositions()
-                
             } else {
                 position += 1
             }
         }
         
         position = 0
-        // Check for '+' & '-' operands
+        //Check for '+' & '-' operands
         for value in equation {
             if value == "+" {
-                
                 equation[position + 1] = String(Int(equation[position - 1])! + Int(equation[position + 1])!)
-                
-                // Remove values from string
+                //Remove values from string
                 removePositions()
-                
             } else if value == "-" {
                 equation[position + 1] = String(Int(equation[position - 1])! - Int(equation[position + 1])!)
-                
-                // Remove values from string
+                //Remove values from string
                 removePositions()
-                
             } else {
                 position += 1
             }
@@ -160,14 +147,16 @@ class mathEquation {
             print("Calcualtion cannot be complete, as missing an equation between two numbers")
             exit(1)
         }
-        
+        //Prints out the final value as an integer
         print(Int(equation[0])!)
     }
 }
 
+//Reads the users input
 var userInput = ProcessInfo.processInfo.arguments
 userInput.removeFirst() // remove the name of the program
 
+//Creates an instance of the class mathEquation and executes it
 let equation = mathEquation(equation: userInput)
 equation.checkEquation()
 equation.calculate()
